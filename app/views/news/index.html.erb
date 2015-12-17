@@ -1,0 +1,44 @@
+<h1>Listing news</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Pending</th>
+      <th>Published</th>
+      <th>Rating</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @news.each do |news| %>
+      <tr>
+        <td><%= news.title %></td>
+        <td><%= news.pending %></td>
+        <td><%= news.published %></td>
+        <td>
+          <% 
+            ran = 0
+            for one in news.comment 
+              ran = ran + one.rating.to_i
+            end
+            ran = ran/news.comment.length
+          %>
+              <%= ran %>
+        </td>
+        <td><%= link_to 'Show', news %></td>
+        <% if session[:user_role] == 2 %>
+        <td><%= link_to 'Edit', edit_news_path(news) %></td>
+        <td><%= link_to 'Destroy', news, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<% if session[:user_id] %>
+<%= link_to 'New News', new_news_path %>
+<% end %>
